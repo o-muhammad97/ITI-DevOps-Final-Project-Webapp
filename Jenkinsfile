@@ -9,7 +9,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                 sh """
                  cd App
-                 sudo docker build . -t ${USERNAME}/webapp:latest
+                 docker build . -t ${USERNAME}/webapp:latest
                  docker login -u ${USERNAME} -p ${PASSWORD}
                  docker push ${USERNAME}/webapp:latest
                  cd ..
