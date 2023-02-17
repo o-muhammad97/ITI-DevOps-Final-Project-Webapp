@@ -7,11 +7,13 @@ pipeline {
             steps {
 
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-                sh "cd App"
-                sh "docker build . -t ${USERNAME}/webapp:latest"
-                sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-                sh "docker push ${USERNAME}/webapp:latest"
-                sh "cd .."
+                sh """
+                 cd App
+                 docker build . -t ${USERNAME}/webapp:latest
+                 docker login -u ${USERNAME} -p ${PASSWORD}
+                 docker push ${USERNAME}/webapp:latest
+                 cd ..
+                 """
                 }
                 // To run Maven on a Windows agent, use
                 // bat "mvn -Dmaven.test.failure.ignore=true clean package"
