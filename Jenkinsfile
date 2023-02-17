@@ -5,9 +5,7 @@ pipeline {
     stages {
         stage('CI') {
              steps {
-            withCredentials([usernamePassword(credentialsId: 'git', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-                git 'https://github.com/o-muhammad97/ITI-DevOps-Final-Project-Webapp.git'
-}
+
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                 sh "docker build . -f Dockerfile -t $JOB_NAME:v1.$BUILD_ID"
                 sh "docker tag $JOB_NAME:v1.$BUILD_ID ${USERNAME}/$JOB_NAME:v1.$BUILD_ID"
