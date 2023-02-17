@@ -16,7 +16,7 @@ spec:
         app: helloapp
     spec:
       containers:
-      - image: rahala7/auto-ci-cd
+      - image: rahala7/final-project-pipeline
         name: helloapp
         imagePullPolicy: Always
         ports:
