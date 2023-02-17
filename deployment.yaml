@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: helloapp
-  namespace: webapp
+  namespace: jenkins
   name: helloapp
 spec:
   replicas: 1
