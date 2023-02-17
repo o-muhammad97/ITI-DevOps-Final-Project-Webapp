@@ -19,8 +19,8 @@ pipeline {
         stage('CD'){
             steps{
                   sh """
-                  kubectl apply -n webapp -f deployment.yaml
-                  kubectl apply -n webapp -f service.yaml
+                  kubectl apply -n jenkins -f deployment.yaml
+                  kubectl apply -n jenkins -f service.yaml
                   """
 
             }
