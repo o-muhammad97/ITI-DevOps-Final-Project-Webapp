@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app
+  namespace: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+      
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: python-app
+          image: rahala7/webapp:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REDIS_HOST
+              value: redis-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+  namespace: app
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
