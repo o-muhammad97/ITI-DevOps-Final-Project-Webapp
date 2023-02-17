@@ -8,6 +8,7 @@ pipeline {
 
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                 sh """
+                 apt-get update -y
                  cd App
                  docker build . -t ${USERNAME}/webapp:latest
                  docker login -u ${USERNAME} -p ${PASSWORD}
