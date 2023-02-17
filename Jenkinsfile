@@ -4,28 +4,25 @@ pipeline {
 
     stages {
         stage('CI') {
-            steps {
-
+             steps {
+            withCredentials([usernamePassword(credentialsId: 'git', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+                git 'https://github.com/o-muhammad97/ITI-DevOps-Final-Project-Webapp.git'
+}
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-                sh """
-                 apt-get update -y
-                 cd App
-                 docker build . -t ${USERNAME}/webapp:latest
-                 docker login -u ${USERNAME} -p ${PASSWORD}
-                 docker push ${USERNAME}/webapp:latest
-                 cd ..
-                 """
-                }
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
-
-
-        }
+                sh "docker build . -f Dockerfile -t $JOB_NAME:v1.$BUILD_ID"
+                sh "docker tag $JOB_NAME:v1.$BUILD_ID ${USERNAME}/$JOB_NAME:v1.$BUILD_ID"
+                sh "docker tag $JOB_NAME:v1.$BUILD_ID ${USERNAME}/$JOB_NAME:latest"
+                sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+                sh "docker push ${USERNAME}/$JOB_NAME:v1.$BUILD_ID"
+                sh "docker push ${USERNAME}/$JOB_NAME:latest"
+}              
+}
+}
         stage('CD'){
             steps{
                   sh """
-                  kubectl apply -f Deployment
+                  kubectl apply -f deployment.yaml
+                  kubectl apply -f service.yaml
                   """
 
             }
